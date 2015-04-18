@@ -4,6 +4,7 @@
     "src": [
       "ORN/**",
       "install/**",
+      "media/**",
       "template/**"
     ],
     "dest": "dist/"
@@ -26,7 +27,7 @@
     "src": [
       "config.php.dist"
     ],
-    "dest": "dist/config.php",
+    "dest": "dist/",
     "filter": "isFile"
   }
 ]

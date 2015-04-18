@@ -38,6 +38,7 @@ class HTMLOutput implements OutputInterface {
             $p = str_replace('|date|', $post['date'], $p);
             $p = str_replace('|id|', $post['id'], $p);
             $p = str_replace('|text|', $post['text'], $p);
+            $p = str_replace('|image|', '<img src="media/image/orange.png" />', $p);
             $posts .= $p;
         }
         $postsHTML = str_replace('|posts|', $posts, $postsHTML);

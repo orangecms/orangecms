@@ -95,7 +95,7 @@ class RSSOutput implements OutputInterface {
         $item->setPubDate(new DateTime($post['date']));
 
         /* TODO: obtain filename from $post */
-        $folder = 'img';
+        $folder = 'media/image';
         $fileName = 'orange.png';
         $filePath = $folder  . '/' . $fileName;
         if (file_exists($filePath)) {

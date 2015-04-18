@@ -19,6 +19,10 @@ ul {
     padding: 0;
     list-style: none none;
 }
+img {
+    margin: 3px;
+    float: right;
+}
 
 .post {
     width: calc(100% - 20px);
@@ -40,6 +44,7 @@ ul {
     color: chartreuse;
 }
 .text {
+    display: inline-block;
     color: silver;
 }
 
