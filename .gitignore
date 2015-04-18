@@ -1,0 +1,22 @@
+# Created by .ignore support plugin (hsz.mobi)
+# NEVER include your config file - this includes your database configuration and the CMS user's password!
+config.php
+
+# generated files
+dist
+release
+doc
+
+# libs
+node_modules
+vendor
+
+# Vagrant
+.vagrant
+Vagrantfile
+provision.sh
+
+# IDE
+.idea
+.komodotools/
+*.komodoproject

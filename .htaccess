@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+#  RewriteBase /
+#  RewriteRule ^(blog)(/[a-zA-Z0-9_]+)?$ index.php/$1 [L]
+#  RewriteRule ^(rss)(/[a-zA-Z0-9_]+)?$ index.php/$1 [L]
+#  RewriteRule ^(posts)(/[a-zA-Z_]+(/[0-9]+)?)?$ index.php/$1 [L]
+#  RewriteRule ^(tags)(/[a-zA-Z_]+(/[0-9]+)?)?$ index.php/$1 [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.php/$1?%{QUERY_STRING} [L]
+</IfModule>

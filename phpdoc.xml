@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>orangecms</title>
+
+    <parser>
+        <target>doc/output</target>
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+    </parser>
+
+    <transformer>
+        <target>doc/doc</target>
+    </transformer>
+
+    <files>
+        <directory>.</directory>
+        <ignore>config.php</ignore>
+        <ignore>tests/*</ignore>
+        <ignore>Tests/*</ignore>
+    </files>
+</phpdoc>

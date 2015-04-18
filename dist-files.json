@@ -1,0 +1,32 @@
+[
+  {
+    "expand": true,
+    "src": [
+      "ORN/**",
+      "install/**",
+      "template/**"
+    ],
+    "dest": "dist/"
+  },
+  {
+    "expand": true,
+    "src": [
+      ".htaccess",
+      "autoload.php",
+      "headers.php",
+      "index.php",
+      "password.php",
+      "README.md"
+    ],
+    "dest": "dist/",
+    "filter": "isFile"
+  },
+  {
+    "expand": false,
+    "src": [
+      "config.php.dist"
+    ],
+    "dest": "dist/config.php",
+    "filter": "isFile"
+  }
+]

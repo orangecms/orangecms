@@ -1,0 +1,6 @@
+{
+    "require": {
+        "behat/mink": "~1.6",
+        "behat/mink-goutte-driver": "~1.1"
+    }
+}

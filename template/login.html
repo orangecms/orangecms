@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Orange CMS - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: monospace, monospace;
+        }
+        form {
+            width: 300px;
+            padding-top: 5px;
+        }
+        fieldset {
+            background-color: #1a3a37;
+            border: 0;
+        }
+        label {
+            color: orange;
+            font-size: 16px;
+            width: auto;
+        }
+        input {
+            width: 240px;
+            height: 32px;
+            margin: auto;
+            padding: 5px;
+            font-size: 24px;
+            font-family: monospace;
+            color: orange;
+            background-color: #1a3a37;
+            border: 1px dashed darkorange;
+            float: right;
+        }
+        input[type="submit"] {
+            width: auto;
+            height: 42px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #main {
+            width: 720px;
+            margin: 15px auto auto;
+            display: flex;
+            justify-content: space-around;
+        }
+        @media all and (max-width: 1080px) {
+            #main {
+                width: 320px;
+                flex-direction: column-reverse;
+            }
+        }
+        @media all and (min-width: 1081px) {
+            #main {
+                flex-direction: row;
+            }
+        }
+        #orange {
+            order: 1;
+            width: 256px;
+            height: 256px;
+            background: url('img/orange.png') no-repeat;
+        }
+        #login {
+            order: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        #login-form {
+            order: 1;
+        }
+        #messages {
+            margin: 10px 0;
+            order: 2;
+        }
+        .space-20 {
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="login">
+            <form id="login-form" method="post" action="login">
+                <fieldset>
+                    <label>
+                        Username:
+                        <input type="text" name="username" title="user" autofocus="1">
+                    </label>
+                </fieldset>
+                <div class="space-20"></div>
+                <fieldset>
+                    <label>
+                        Password:
+                        <input type="password" name="password" title="password">
+                    </label>
+                </fieldset>
+                <div class="space-20"></div>
+                <input type="submit" value="Login">
+            </form>
+
+            <div id="messages">|content|</div>
+        </div>
+        <div id="orange"></div>
+    </div>
+</body>
+</html>

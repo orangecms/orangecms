@@ -1,0 +1,28 @@
+<?php
+
+// TODO: change according to your setup
+
+global $config;
+
+$serverName = (isset($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : null;
+
+$config = array(
+    'env' => array(
+        'baseURL' => 'http://' . $serverName
+    ),
+    'blog' => array(
+        'author'      => 'You',
+        'title'       => 'My blog',
+        'description' => 'A blog on tech and kitties',
+    ),
+    'sql' => array(
+        'host'     => 'localhost',
+        'username' => 'orangecms',
+        'password' => 'orangecms',
+        'database' => 'orangecms'
+    ),
+    'user' => array(
+        'username' => 'orangecms',
+        'password' => 'orangecms'
+    )
+);

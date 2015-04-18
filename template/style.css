@@ -1,0 +1,54 @@
+body {
+    font-family: "Consolas", "Menlo", "Courier", monospace;
+    font-size: 16px;
+}
+
+h1 {
+    font-size: 24px;
+}
+h2 {
+    font-size: 20px;
+}
+h3 {
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+    list-style: none none;
+}
+
+.post {
+    width: calc(100% - 20px);
+    margin: 10px 0;
+    padding: 5px;
+    background-color: darkslategray;
+    font-size: 16px;
+}
+.head {
+    height: 20px;
+    border-bottom: solid 1px #303030;
+}
+.date {
+    display: inline-block;
+    color: cadetblue;
+}
+.title {
+    display: inline-block;
+    color: chartreuse;
+}
+.text {
+    color: silver;
+}
+
+.half {
+    width: 50%;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
