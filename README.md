@@ -4,8 +4,8 @@ easily create your own little self-hosted blog using the
 [O]pen [R]SS Feed [a]nd [N]ews Page [G]enerator [E]ngine
 written by Daniel Maslowski. It is tiny, quick & orange.
 
-You may obtain all source files from [http://src.orangecms.org/].
-Releases can be found on [http://cms.orangecms.org/].
+You may obtain all source files from [http://src.orangecms.org/](http://src.orangecms.org/).
+Releases can be found on [http://cms.orangecms.org/](http://cms.orangecms.org/).
 
 # Installation
 
@@ -19,7 +19,7 @@ For nginx you will have to configure the root to Orange CMS for rewrite rules an
 Most preconfigured Apache installations should be fine. You might need to run `a2enmod rewrite`.
 
 ## Orange CMS distribution
-If you obtained a zip file release, simply put its contents into the desired folder of your webserver.
+If you obtained a zip file release, simply extract it and put the contents of the `orangecms` folder into the desired folder of your webserver.
 If you run an OS with a package manager, you might have found Orange CMS in one of the repositories there. I'm using FreeBSD and Linux myself, and I'm planning to write packages for several distros. ;)
 If you cloned the git repository, you may wish to create a build first. See the development section below for more information.
 
@@ -28,20 +28,21 @@ WARNING: The following methods transfer all your data _unprotected_, including y
 
 First of all, move the file `config.php.dist` to `config.php` and edit it according to your setup.
 
-Now you can visit [http://your-server/login] to log in and then open [http://your-server/install].
+Now you can visit `http://your-server/login` to log in and then open `http://your-server/install`.
 This will drop existing tables in your database, create new ones and add some demo posts and tags.
-You can then see them on [http://your-server/blog] and [http://your-server/blog/cats] for example.
+You can then see them on `http://your-server/blog` and `http://your-server/blog/cats` for example.
 
 # Usage
-There is already RSS output available on [http://your-server/rss] and [http://your-server/rss/tag] as well as HTML Output on [http://your-server/blog] and [http://your-server/blog/tag] respectively.
+There is already RSS output available on `http://your-server/rss` and `http://your-server/rss/tag` as well as HTML Output on `http://your-server/blog` and `http://your-server/blog/tag` respectively.
 
-This is all for now, but you can use any REST client to actually create more meaningful content as well as edit or delete existing posts. A full documentation of the API and clients for several platforms will be following later.
+This is all for now, but you can use any REST client to actually create more meaningful content as well as edit or delete existing posts. I use [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) for that purpose.
+
+A full [documentation of the API](http://api.orangecms.org/) and clients for several platforms will be following later.
 
 # Development
 
 ## Testing
-Please make sure you have Composer and PHPUnit first and added them to your PATH.
-If not you may obtain them from [https://getcomposer.org/] and [https://phpunit.de/].
+Please make sure you have [Composer](https://getcomposer.org/) and [PHPUnit](https://phpunit.de/) first and added them to your PATH.
 Before using (and writing) tests, run `composer install` to install the necessary PHP libraries.
 See `composer.json` and the respective manuals of PHPUnit and Behat/Mink for reference.
 
