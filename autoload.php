@@ -12,11 +12,11 @@
  */
 $autoload = function($className) {
     $className = str_replace('\\', '/', $className);
-    $inc = __DIR__ . "/$className.php";
-    if (file_exists($inc)) {
-//        echo "Including $className from $inc ...\n";
+    $file = __DIR__ . "/$className.php";
+    if (file_exists($file)) {
+        if (DEBUG && VERBOSE) echo "Including $className from $file ...\n";
         /** @noinspection PhpIncludeInspection */
-        require_once($inc);
+        require_once($file);
     }
 };
 

@@ -33,7 +33,8 @@ class HTMLOutput implements OutputInterface {
         if (DEBUG) var_dump($tag);
         if (DEBUG && VERBOSE) var_dump($route);
         $posts = '';
-        foreach ((new Posts())->getPostsByTag($tag) as $post) {
+        $postsDb = new Posts();
+        foreach ($postsDb->getPostsByTag($tag) as $post) {
             $p = str_replace('|title|', $post['title'], $postHTML);
             $p = str_replace('|date|', $post['date'], $p);
             $p = str_replace('|id|', $post['id'], $p);

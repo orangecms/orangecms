@@ -382,7 +382,7 @@ class MySQL {
     private function connect()
     {
         $link = new mysqli($this->host, $this->username, $this->password);
-        if (!$link->connect_errno) {
+        if (!$link->connect_errno && $link->set_charset("utf8")) {
             mysqli_select_db($link, $this->database);
             return $link;
         } else {

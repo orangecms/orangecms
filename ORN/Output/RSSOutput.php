@@ -37,7 +37,8 @@ class RSSOutput implements OutputInterface {
         $channelName = isset($route[0]) ? $route[0] : null;
         if (DEBUG) var_dump($channelName);
         if (DEBUG && VERBOSE) var_dump($route);
-        $posts = (new Posts())->getPostsByTag($channelName);
+        $postsDb = new Posts();
+        $posts = $postsDb->getPostsByTag($channelName);
         /* create channel */
         global $config;
         $baseURL = $config['env']['baseURL'];
@@ -100,7 +101,8 @@ class RSSOutput implements OutputInterface {
         $filePath = $folder  . '/' . $fileName;
         if (file_exists($filePath)) {
             $size = filesize($filePath);
-            $type = (new finfo(FILEINFO_MIME_TYPE))->file($filePath);
+            $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+            $type = $fileInfo->file($filePath);
             $item->setEnclosure(new RSS20ItemEnclosure(
                 $baseURL . '/' . $filePath,
                 $size,

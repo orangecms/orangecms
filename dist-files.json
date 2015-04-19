@@ -17,6 +17,7 @@
       "headers.php",
       "index.php",
       "password.php",
+      "LICENSE",
       "README.md"
     ],
     "dest": "dist/",

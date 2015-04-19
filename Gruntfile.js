@@ -22,8 +22,16 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        src: ['dist/**'],
+                        expand: true,
+                        cwd: 'dist/',
+                        src: ['**'],
                         dest: 'orangecms/'
+                    },
+                    {
+                        cwd: 'dist/',
+                        src: ['.htaccess'],
+                        dest: 'orangecms/',
+                        filter: 'isFile'
                     }
                 ]
             }
