@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Orange CMS - Simple form</title>
+</head>
+<body>
+<div id="main">
+
+    <h2>This is just a demo. ;)</h2>
+
+    <!-- TODO: use |base_URL| and use this file as a template -->
+    <form class="new-post" method="post" action="/posts" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Title" />
+        <textarea name="text" placeholder="Your text"></textarea>
+        <fieldset>
+            <label for="media" class="left">
+                &oplus; attach media
+                <input id="media"
+                       name="media"
+                       type="file"
+                       accept="image/jpeg,image/png" />
+            </label>
+            <label for="submit" class="button right">
+                <input id="submit" type="submit" value="+" />
+            </label>
+        </fieldset>
+    </form>
+
+    <link rel="stylesheet" type="text/css" property="" href="style.css" />
+
+</div>
+</body>
+</html>

@@ -32,11 +32,6 @@ use ORN\REST\Posts;
 use ORN\REST\RESTInterface;
 use ORN\REST\Tags;
 
-//define('DEBUG',   true);
-define('DEBUG',   false);
-//define('VERBOSE', true);
-define('VERBOSE', false);
-
 require_once('autoload.php');
 require_once('password.php');
 require_once('headers.php');
@@ -44,38 +39,57 @@ require_once('config.php');
 
 function init()
 {
-    /* handle files */
-//    var_dump($_FILES);
+    global $config;
+    define('DEBUG',
+        isset($config['system']) &&
+        isset($config['system']['debug']) &&
+        $config['system']['debug']
+    );
+    define('VERBOSE',
+        isset($config['system']) &&
+        isset($config['system']['verbose']) &&
+        $config['system']['verbose']
+    );
+    if (DEBUG && VERBOSE) echo '<pre>';
 
     /* handle route */
     $route = explode('/', strtok(getenv('REQUEST_URI'), '?'));
     // first element is an empty string, so it must be removed
     array_shift($route);
-    if (DEBUG && VERBOSE) var_dump(getenv('REQUEST_URI'), $route);
+    if (DEBUG && VERBOSE) var_dump('route: ', getenv('REQUEST_URI'), $route);
 
     /* handle request parameters */
     $params = $_GET;
-    if (DEBUG && VERBOSE) var_dump('original params: ', $params);
+    if (DEBUG && VERBOSE) var_dump('params: ', $params);
+
+    /* handle headers */
+    $headers = getallheaders();
+    $isJsonRequest = (
+        isset($headers['Content-Type']) &&
+        $headers['Content-Type'] == 'application/json'
+    );
+    // TODO: add CORS support!
+    $isCorsRequest = false;
 
     /* handle request body */
-    $inputJSON = file_get_contents('php://input');
-    $inputArray = json_decode($inputJSON, true);
-    $data = null;
-    if (is_array($inputArray)) {
-        $data = $inputArray;
+    $input = file_get_contents('php://input');
+    if (DEBUG && VERBOSE) var_dump('input: ', $input);
+    $inputArrayFromJson = json_decode($input, true);
+    if (DEBUG && VERBOSE) var_dump('json: ', $inputArrayFromJson);
+
+    if (is_array($inputArrayFromJson)) {
+        $data = $inputArrayFromJson;
     } else {
-        $headers = getallheaders();
-        if (isset($headers['Content-Type']) &&
-            $headers['Content-Type'] == 'application/json') {
-            $data = array();
-        } else {
+        if (count($_POST)) {
             $data = $_POST;
+            if (DEBUG && VERBOSE) var_dump('body: ', $data, $_POST);
+        } else {
+            $data = array();
         }
     }
-    if (DEBUG && VERBOSE) var_dump($data);
 
     /* initialize controller */
-    /**@var $ctrl RESTInterface|OutputInterface*/
+    /** @var $ctrl RESTInterface|OutputInterface */
     $ctrl = null;
     /* the first part of the route maps to the controller */
     switch (array_shift($route)) {
@@ -84,15 +98,17 @@ function init()
         case 'posts' : $ctrl = new Posts();      break;
         case 'tags'  : $ctrl = new Tags();       break;
         case 'login' : $ctrl = new Login();      break;
+        case 'logout': $ctrl = new Login(); $params['logout'] = 1; break;
+        default      : $ctrl = new HTMLOutput();
     }
     if (DEBUG) var_dump($route);
 
     if ($ctrl instanceof RESTInterface) {
         switch ($_SERVER['REQUEST_METHOD']) {
-            case 'GET'    : $ctrl->get($route, $params);         break;
-            case 'POST'   : $ctrl->post($route, $params, $data); break;
-            case 'PUT'    : $ctrl->put($route, $params, $data);  break;
-            case 'DELETE' : $ctrl->delete($route, $data);        break;
+            case 'GET'    : $ctrl->get($route, $params, $isJsonRequest);         break;
+            case 'POST'   : $ctrl->post($route, $params, $data, $isJsonRequest); break;
+            case 'PUT'    : $ctrl->put($route, $params, $data);                  break;
+            case 'DELETE' : $ctrl->delete($route, $data);                        break;
         }
     } else if ($ctrl instanceof OutputInterface) {
         if ($ctrl->prepare($route, $params)) {
@@ -102,6 +118,7 @@ function init()
         }
     }
 
+    if (DEBUG && VERBOSE) echo '</pre>';
     return true;
 }
 

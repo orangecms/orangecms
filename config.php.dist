@@ -4,11 +4,14 @@
 
 global $config;
 
+$appRootDir = __DIR__;
 $serverName = (isset($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : null;
 
 $config = array(
     'env' => array(
-        'baseURL' => 'http://' . $serverName
+        'app_root_dir'    => $appRootDir,
+        'base_URL'        => 'http://' . $serverName,
+        'max_upload_size' => 1000000
     ),
     'blog' => array(
         'author'      => 'You',
@@ -24,5 +27,9 @@ $config = array(
     'user' => array(
         'username' => 'orangecms',
         'password' => 'orangecms'
+    ),
+    'system' => array(
+        'debug'           => false,
+        'verbose'         => true,
     )
 );

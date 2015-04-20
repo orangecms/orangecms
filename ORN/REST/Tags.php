@@ -8,7 +8,7 @@
 
 namespace ORN\REST;
 
-use ORN\DB\DbRepository;
+use ORN\DB\Tags as TagsRepo;
 
 /**
  * Class Tags
@@ -18,20 +18,33 @@ class Tags implements RESTInterface {
     /**
      * @param array $route
      * @param array $params
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function get($route, $params)
+    public function get($route, $params, $isJSONRequest = false)
     {
-        echo ":)";
+        if (isset($route[0])) {
+            $id = (int) $route[0];
+            $tagsRepo = new TagsRepo();
+            $posts = $tagsRepo->getTagsByPostId($id);
+            if (is_array($posts)) {
+                header('Content-Type: application/json');
+                echo json_encode($posts);
+            } else {
+                echo 'Error retrieving posts :(';
+                http_response_code(503);
+            }
+        }
     }
 
     /**
      * @param array $route
      * @param array $params
      * @param array $data
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function post($route, $params, $data)
+    public function post($route, $params, $data, $isJSONRequest = false)
     {
         // TODO: Implement post() method.
     }

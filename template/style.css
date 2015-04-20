@@ -1,4 +1,7 @@
 body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
     font-family: "Consolas", "Menlo", "Courier", monospace;
     font-size: 16px;
 }
@@ -24,8 +27,36 @@ img {
     float: right;
 }
 
+#main {
+    margin: 15px auto auto;
+}
+@media all and (max-width: 1080px) {
+    #main {
+        width: 400px;
+    }
+    .post {
+        width: 380px;
+    }
+    .post img {
+        max-width: 360px;
+    }
+}
+@media all and (min-width: 1081px) {
+    #main {
+        width: 720px;
+    }
+    .post {
+        width: 700px;
+    }
+    .post img {
+        max-width: 680px;
+    }
+}
+
+.post img {
+    width: 360px;
+}
 .post {
-    width: calc(100% - 20px);
     margin: 10px 0;
     padding: 5px;
     background-color: darkslategray;
@@ -48,9 +79,6 @@ img {
     color: silver;
 }
 
-.half {
-    width: 50%;
-}
 .left {
     float: left;
 }

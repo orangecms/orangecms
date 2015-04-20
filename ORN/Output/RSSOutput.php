@@ -14,6 +14,7 @@ use DateTime;
 /* RSS20 classes */
 use finfo;
 use ORN\DB\Posts;
+use ORN\MediaFile;
 use ORN\Output\RSS20\RSS20Channel;
 use ORN\Output\RSS20\RSS20Feed;
 use ORN\Output\RSS20\RSS20Image;
@@ -37,11 +38,11 @@ class RSSOutput implements OutputInterface {
         $channelName = isset($route[0]) ? $route[0] : null;
         if (DEBUG) var_dump($channelName);
         if (DEBUG && VERBOSE) var_dump($route);
-        $postsDb = new Posts();
-        $posts = $postsDb->getPostsByTag($channelName);
+        $postsRepo = new Posts();
+        $posts = $postsRepo->getPostsByTag($channelName);
         /* create channel */
         global $config;
-        $baseURL = $config['env']['baseURL'];
+        $baseURL = $config['env']['base_URL'];
         /* basic channel setup */
         $title = $config['blog']['title'];
         if ($channelName) {
@@ -54,7 +55,7 @@ class RSSOutput implements OutputInterface {
         );
         /* channel image */
         $image = new RSS20Image(
-            $baseURL . '/img/channel.png',
+            $baseURL . '/media/image/channel.png',
             $config['blog']['title'],
             $baseURL
         );
@@ -87,27 +88,43 @@ class RSSOutput implements OutputInterface {
      */
     private function createRSSItem($post, $baseURL)
     {
+        /* create basic item */
+        $id = $post['id'];
         $item = new RSS20Item(
             $post['title'],
-            $baseURL . '/blog/' . $post['id'],
+            $baseURL . '/blog/' . $id,
             $post['text']
         );
-
+        /* add date */
         $item->setPubDate(new DateTime($post['date']));
-
-        /* TODO: obtain filename from $post */
-        $folder = 'media/image';
-        $fileName = 'orange.png';
-        $filePath = $folder  . '/' . $fileName;
-        if (file_exists($filePath)) {
-            $size = filesize($filePath);
-            $fileInfo = new finfo(FILEINFO_MIME_TYPE);
-            $type = $fileInfo->file($filePath);
-            $item->setEnclosure(new RSS20ItemEnclosure(
-                $baseURL . '/' . $filePath,
-                $size,
-                $type
-            ));
+        /* append media enclosure if defined */
+        $fileName = $post['media'];
+        if ($fileName) {
+            global $config;
+            $appDir = $config['env']['app_root_dir'];
+            $filePath = '';
+            /* search and verify file */
+            $imagePath = 'media/image/' . $id . $fileName;
+            $audioPath = 'media/audio/' . $id . $fileName;
+            if ($type = MediaFile::imageFileType(
+                /* try image file */
+                $appDir . '/' . $imagePath, $fileName
+            )) {
+                $filePath = $imagePath;
+            } else if ($type = MediaFile::audioFileType(
+                /* try audio file */
+                $appDir . '/' . $audioPath, $fileName
+            )) {
+                $filePath = $audioPath;
+            }
+            /* append to item */
+            if ($filePath && $type) {
+                $item->setEnclosure(new RSS20ItemEnclosure(
+                    $baseURL . '/' . $filePath,
+                    filesize($appDir . '/' . $filePath),
+                    $type
+                ));
+            }
         }
 
         return $item;

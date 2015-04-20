@@ -2,14 +2,22 @@
 <head>
     <title>Orange CMS</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
 </head>
 
 <body>
 
-<h1>Welcome to Orange CMS! :)</h1>
+<div id="main">
 
-|content|
+    <h1>Welcome to Orange CMS! :)</h1>
 
-<link rel="stylesheet" type="text/css" property="" href="/template/style.css" />
+    Me haz RSS at <a href="|base_URL|/rss">|base_URL|/rss</a>.<br />
+
+    |content|
+
+    <link rel="stylesheet" type="text/css" property="" href="template/style.css" />
+    <link rel="alternate" type="application/rss+xml" property="" title="RSS feed" href="|base_URL|/rss" />
+
+</div>
 </body>
 </html>

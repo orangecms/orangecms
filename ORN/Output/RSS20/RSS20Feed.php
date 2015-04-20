@@ -35,7 +35,7 @@ class RSS20Feed {
         $rssImage->addChild('link', $channel->getImage()->getLink());
         /* add items */
         foreach ($channel->getItems() as $item) {
-            /**@var $item RSS20Item*/
+            /** @var $item RSS20Item */
             /* add mandatory elements */
             $rssItem = $rssChannel->addChild('item');
             $rssItem->addChild('title', $item->getTitle());

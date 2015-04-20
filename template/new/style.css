@@ -1,0 +1,132 @@
+body {
+  font-family: "Consolas", "Menlo", "Courier", monospace;
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 20px;
+}
+h3 {
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none none;
+}
+
+form {
+  width: calc(100% - 15px);
+  padding: 5px;
+  margin: 0;
+  background-color: darkslategray;
+}
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+input[type=text], textarea, input[type=submit] {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: "Consolas", "Menlo", "Courier", monospace;
+  font-size: 16px;
+}
+input[type=text], textarea {
+  width: 100%;
+  border-bottom: solid 1px #303030;
+  background-color: darkslategray;
+}
+input[type=text] {
+  color: chartreuse;
+}
+input[type=file] {
+  display: none;
+}
+textarea {
+  height: 300px;
+  resize: none;
+  color: silver;
+}
+input[type=submit], button {
+  width: 18px;
+  height: 18px;
+  line-height: 5px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: slateblue;
+  background-color: coral;
+  border: 1px solid black;
+}
+
+#main {
+    margin: 15px auto auto;
+}
+@media all and (max-width: 1080px) {
+    #main {
+        width: 400px;
+    }
+    .post {
+        width: 380px;
+    }
+    .post img {
+        max-width: 360px;
+    }
+}
+@media all and (min-width: 1081px) {
+    #main {
+        width: 720px;
+    }
+    .post {
+        width: 700px;
+    }
+    .post img {
+        max-width: 680px;
+    }
+}
+
+.post {
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  padding: 5px;
+  background-color: darkslategray;
+  font-size: 16px;
+}
+.head {
+  height: 20px;
+  border-bottom: solid 1px #303030;
+}
+.date {
+  display: inline-block;
+  color: cadetblue;
+}
+.title {
+  display: inline-block;
+  color: chartreuse;
+}
+.text {
+  color: silver;
+}
+.button {
+  margin-top: 3px;
+}
+.delete, .edit {
+  margin-left: 3px;
+}
+
+.half {
+  width: 50%;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}

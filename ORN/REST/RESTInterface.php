@@ -16,17 +16,19 @@ interface RESTInterface {
     /**
      * @param array $route
      * @param array $params
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function get($route, $params);
+    public function get($route, $params, $isJSONRequest = false);
 
     /**
      * @param array $route
      * @param array $params
      * @param array $data
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function post($route, $params, $data);
+    public function post($route, $params, $data, $isJSONRequest = false);
 
     /**
      * @param array $route

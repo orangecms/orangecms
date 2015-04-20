@@ -47,7 +47,8 @@ if ($auth->authenticate()) {
             $data = array(
                 array(
                     'title' => 'test entry 1',
-                    'text'  => simplexml_load_file($lipsumApi . '?amount=512&what=bytes')->lipsum
+                    'text'  => simplexml_load_file($lipsumApi . '?amount=512&what=bytes')->lipsum,
+                    'media' => 'orange.png'
                 ),
                 array(
                     'title' => 'test entry 2',

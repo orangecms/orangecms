@@ -14,7 +14,7 @@ namespace ORN\DB;
  */
 class Posts extends DbRepository
 {
-    /**@var $table string */
+    /** @var $table string */
     private $table = 'posts';
 
     /**
@@ -29,7 +29,7 @@ class Posts extends DbRepository
      * @param $tag
      * @return array
      */
-    public function getPostsByTag($tag)
+    public function getPostsByTag($tag = null)
     {
         if ($tag) {
             /* TODO: prepared statement for inner SELECT! */
@@ -53,38 +53,36 @@ class Posts extends DbRepository
 
     /**
      * @param $data
-     * @return bool
+     * @return int
      */
     public function create($data)
     {
-        if (DEBUG) var_dump($data);
+        if (DEBUG) var_dump('data for DB: ', $data);
 
-        if (isset($data['title'])) {
-            // TODO: filter bad characters and stuff
-            $title = $data['title'];
-        }
-        if (isset($data['text'])) {
-            // TODO: filter bad characters and stuff
-            $text = $data['text'];
-        }
-        if (isset($title) && isset($text)) {
-            if (DEBUG) var_dump($title, $text);
+        // TODO: filter bad characters and stuff
+        $title = isset($data['title']) ? $data['title'] : null;
+        $text  = isset($data['text'])  ? $data['text']  : null;
+        $media = isset($data['media']) ? $data['media'] : null;
 
-            $data = array(
-                'title' => $title,
-                'text'  => $text
+        if (DEBUG && VERBOSE) var_dump('title and text: ', $title, $text);
+
+        if ($title && $text) {
+            $result = $this->getDb()->insert(
+                $this->table,
+                array(
+                    'title' => $title,
+                    'text'  => $text,
+                    'media' => $media
+                )
             );
-
-            if (DEBUG && VERBOSE) var_dump($data);
-
-            if ($this->getDb()->insert($this->table, $data)) {
+            if ($result) {
                 echo "Data inserted successfully! :)\n";
-                return true;
+                return $result;
             } else {
                 echo "Error inserting data :(\n";
             }
         }
-        return false;
+        return 0;
     }
 
     /**

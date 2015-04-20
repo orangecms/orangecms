@@ -93,7 +93,7 @@ class MySQL {
     /**
      * @param string $table
      * @param array $data
-     * @return bool
+     * @return int The ID of the INSERT
      */
     public function insert($table, $data)
     {
@@ -127,13 +127,14 @@ class MySQL {
                 if (DEBUG && VERBOSE) var_dump($link, $statement);
                 /* bind parameters and execute */
                 $this->bindParams($statement, $params, null);
-                $result = $statement->execute();
+                $result = $statement->execute() ? $link->insert_id : 0;
+                if (DEBUG && VERBOSE) var_dump('SQL insert ID: ', $result);
                 $statement->close();
                 $link->close();
                 return $result;
             }
         }
-        return false;
+        return 0;
     }
 
     /**

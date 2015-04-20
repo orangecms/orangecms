@@ -16,15 +16,17 @@ class Login implements RESTInterface
     /**
      * @param array $route
      * @param array $params
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function get($route, $params)
+    public function get($route, $params, $isJSONRequest = false)
     {
         $auth = new Auth();
         $errors = array();
         $output = '';
-
-        if ($auth->authenticate()) {
+        /* authentication */
+        $login = $auth->authenticate();
+        if ($login) {
             if (isset($params['logout'])) {
                 if ($auth->logout()) {
                     $output .= 'You have been logged out. Bye bye!';
@@ -37,35 +39,24 @@ class Login implements RESTInterface
         } else {
             $output .= 'Please log in.';
         }
-
-        $html = true;
-        if ($html) {
-            foreach ($errors as $error) {
-                $output .= '<br />' . $error . '<br />';
-            }
-            $loginHTML = @implode('', @file('template/login.html'));
-            $output = str_replace('|content|', $output, $loginHTML);
-            echo $output;
-        } else {
-            echo $output;
-            foreach ($errors as $error) {
-                echo $error;
-            }
-        }
+        /* output */
+        $this->output($isJSONRequest, $login, $output, $errors);
     }
 
     /**
      * @param array $route
      * @param array $params
      * @param array $data
+     * @param bool $isJSONRequest
      * @return mixed
      */
-    public function post($route, $params, $data)
+    public function post($route, $params, $data, $isJSONRequest = false)
     {
         global $config;
 
         $auth = new Auth();
         $login = $auth->authenticate();
+        $info = '';
         $errors = array();
 
         if (!$login) {
@@ -84,28 +75,15 @@ class Login implements RESTInterface
             $errors[] = 'You are already logged in.';
         }
 
-        $output = '';
         if ($login) {
-            $output .= "Hello {$config['user']['username']}! :)";
+            $info .= "Hello {$config['user']['username']}! :)";
         } else {
             $errors[] = 'Login failed.';
+            header('WWW-Authenticate: xBasic realm=""');
             http_response_code(401);
         }
-
-        $html = true;
-        if ($html) {
-            foreach ($errors as $error) {
-                $output .= '<br />' . $error . '<br />';
-            }
-            $loginHTML = @implode('', @file('template/login.html'));
-            $output = str_replace('|content|', $output, $loginHTML);
-            echo $output;
-        } else {
-            echo $output;
-            foreach ($errors as $error) {
-                echo $error;
-            }
-        }
+        /* output */
+        $this->output($isJSONRequest, $login, $info, $errors);
     }
 
     /**
@@ -127,5 +105,35 @@ class Login implements RESTInterface
     public function delete($route, $params)
     {
         // TODO: Implement delete() method.
+    }
+
+    /**
+     * @param bool $isJsonRequest
+     * @param bool $login
+     * @param string $info
+     * @param array $errors
+     */
+    private function output($isJsonRequest, $login, $info, $errors)
+    {
+        /* output */
+        if ($isJsonRequest) {
+            header('Content-Type: application/json');
+            echo json_encode(
+                array(
+                    'info'   => $info,
+                    'errors' => $errors
+                )
+            );
+        } else {
+            /* load HTML template */
+            $loginHTML = @implode('', @file('template/login.html'));
+            /* append errors */
+            if ($login) {
+                $info .= @implode('', @file('template/links.html'));
+            }
+            $info .= '<br />' . implode('<br />', $errors);
+            /* add output to HTML and echo */
+            echo str_replace('|content|', $info, $loginHTML);
+        }
     }
 }

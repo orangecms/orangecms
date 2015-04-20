@@ -13,10 +13,10 @@ namespace ORN\DB;
  * @package ORN\DB
  */
 abstract class DbRepository {
-    /**@var $db MySQL*/
+    /** @var $db MySQL */
     private $db = null;
 
-    /**@var $table string*/
+    /** @var $table string */
     private $table = '';
 
     /**
