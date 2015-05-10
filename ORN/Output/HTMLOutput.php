@@ -25,32 +25,47 @@ class HTMLOutput implements OutputInterface {
      */
     function prepare($route, $params)
     {
-        $indexHTML = @implode("", @file("template/index.html"));
-        $postsHTML = @implode("", @file("template/posts.html"));
-        $postHTML  = @implode("", @file("template/post.html"));
+        $indexTemplate = @implode("", @file("template/index.html"));
+        $postsTemplate = @implode("", @file("template/posts.html"));
+        $postTemplate  = @implode("", @file("template/post.html"));
 
+        global $config;
         date_default_timezone_set('Europe/Berlin');
         $tag = isset($route[0]) ? $route[0] : null;
         if (DEBUG) var_dump($tag);
         if (DEBUG && VERBOSE) var_dump($route);
         $posts = '';
         $postsRepo = new Posts();
-        foreach ($postsRepo->getPostsByTag($tag) as $post) {
-            $id = $post['id'];
-            $fileName = $this->getImagePath($id, $post['media']);
-            $imageTag = $fileName ? "<img src=\"$fileName\" />" : $fileName;
 
-            $p = str_replace('|title|', $post['title'], $postHTML);
-            $p = str_replace('|date|', $post['date'], $p);
-            $p = str_replace('|id|', $id, $p);
-            $p = str_replace('|text|', $post['text'], $p);
-            $p = str_replace('|image|', $imageTag, $p);
-            $posts .= $p;
+        $metaTitle = '';
+        $id = (int) $tag;
+        if ($id) {
+            $post = $postsRepo->getPostById($id);
+            if (is_array($post)) {
+                $posts .= $this->getPostHTML($post, $postTemplate);
+                $metaTitle = $post['title'];
+            }
+        } else {
+            foreach ($postsRepo->getPostsByTag($tag) as $post) {
+                $posts .= $this->getPostHTML($post, $postTemplate);
+            }
+            $metaTitle = $config['blog']['title'];
         }
-        $postsHTML = str_replace('|posts|', $posts, $postsHTML);
+        $posts = str_replace('|posts|', $posts, $postsTemplate);
 
-        $output = str_replace('|content|', $postsHTML, $indexHTML);
+        $metaTitle = $metaTitle . ' - ' . $config['blog']['title'];
+        $metaAuthor = $config['blog']['author'];
+        $metaDescription = $config['blog']['description'];
+
+
+        $output = str_replace('|meta_title|', $metaTitle, $indexTemplate);
+        $output = str_replace('|meta_author|', $metaAuthor, $output);
+        $output = str_replace('|meta_description|', $metaDescription, $output);
+
+        $output = str_replace('|content|', $posts, $output);
+
         global $config;
+
         $baseURL = $config['env']['base_URL'];
         $output = str_replace('|base_URL|', $baseURL, $output);
 
@@ -66,12 +81,13 @@ class HTMLOutput implements OutputInterface {
     private function getImagePath($id, $fileName)
     {
         global $config;
-        $appDir = $config['env']['app_root_dir'];
+        $appDir  = $config['env']['app_root_dir'];
+        $baseURL = $config['env']['base_URL'];
         $imagePath = 'media/image/' . $id . $fileName;
         if ($type = MediaFile::imageFileType(
             $appDir . '/' . $imagePath, $fileName
         )) {
-            return $imagePath;
+            return $baseURL . '/' . $imagePath;
         }
         return '';
     }
@@ -83,5 +99,34 @@ class HTMLOutput implements OutputInterface {
     {
         echo $this->blog;
         return true;
+    }
+
+    /**
+     * @param $post
+     * @param $postHTML
+     * @return mixed
+     */
+    private function getPostHTML($post, $postHTML)
+    {
+        $id = $post['id'];
+        $p = str_replace('|title|', $post['title'], $postHTML);
+        $p = str_replace('|date|', $post['date'], $p);
+        $p = str_replace('|id|', $id, $p);
+        $p = str_replace('|text|', $this->parseText($post['text']), $p);
+        $fileName = $this->getImagePath($id, $post['media']);
+        $imageTag = $fileName ? "<img src=\"$fileName\" />" : $fileName;
+        $p = str_replace('|image|', $imageTag, $p);
+        return $p;
+    }
+
+    /**
+     * TODO: recognize URLs and create links
+     *
+     * @param string $text
+     * @return string
+     */
+    private function parseText($text)
+    {
+        return nl2br($text);
     }
 }

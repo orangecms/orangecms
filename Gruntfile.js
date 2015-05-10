@@ -2,7 +2,7 @@ var config = {
     pkg:  require('./package.json'),
     app:  '.',
     dist: 'dist',
-    version: '0.4'
+    version: '0.5'
 };
 
 module.exports = function (grunt) {

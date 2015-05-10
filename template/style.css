@@ -22,10 +22,6 @@ ul {
     padding: 0;
     list-style: none none;
 }
-img {
-    margin: 3px;
-    float: right;
-}
 
 #main {
     margin: 15px auto auto;
@@ -55,6 +51,8 @@ img {
 
 .post img {
     width: 360px;
+    margin: 3px;
+    float: right;
 }
 .post {
     margin: 10px 0;

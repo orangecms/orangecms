@@ -52,6 +52,23 @@ class Posts extends DbRepository
     }
 
     /**
+     * @param $id
+     * @return array
+     */
+    public function getPostById($id)
+    {
+        $post = $this->getDb()->select(
+            $this->table,
+            array('id' => $id),
+            'date'
+        );
+        if (count($post) == 1) {
+            return $post[0];
+        }
+        return null;
+    }
+
+    /**
      * @param $data
      * @return int
      */
