@@ -1,0 +1,5 @@
+- Tags support
+- mobile-friendly theme
+- CORS support
+- Angular app
+- jQuery Widget

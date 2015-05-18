@@ -1,6 +1,13 @@
 {
-    "require": {
+    "require-dev": {
         "behat/mink": "~1.6",
-        "behat/mink-goutte-driver": "~1.1"
+        "behat/mink-goutte-driver": "~1.1",
+        "sebastian/phpcpd": "^2.0",
+        "pdepend/pdepend": "^2.0",
+        "phpmd/phpmd": "^2.2",
+        "phpunit/phpunit": "^4.6",
+        "phploc/phploc": "^2.1",
+        "theseer/phpdox": "^0.8.0",
+        "squizlabs/php_codesniffer": "^2.3"
     }
 }
