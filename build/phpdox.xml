@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  This is a skeleton phpDox config file - Check http://phpDox.de for latest version and more info -->
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
+    <!--  @silent: true | false to enable or disable visual output of progress -->
+
+    <!-- A phpDox project to process, you can have multiple projects in one config file -->
+    <project name="Orange CMS" source="${basedir}/../ORN" workdir="${basedir}/phpdox/xml">
+
+        <!--  Additional configuration for the collecting process (parsing of php code, generation of xml data) -->
+        <collector publiconly="false" backend="parser" encoding="auto">
+            <!--  @publiconly - Flag to disable/enable processing of non public methods and members -->
+            <!--  @backend    - The collector backend to use, currently only shipping with 'parser' -->
+            <!--  @encoding   - Charset encoding of source files (overwrite default 'auto' if detection fails) -->
+
+            <!--  <include / exclude filter for filelist generator, mask must follow fnmatch() requirements  -->
+            <include mask="*.php" />
+            <exclude mask="" />
+
+        </collector>
+
+        <!--  Configuration of generation process -->
+        <generator output="${basedir}/../docs">
+
+            <enrich base="${basedir}/logs">
+                <!-- add phploc output -->
+                <source type="phploc">
+                    <file name="phploc.xml" />
+                </source>
+
+                <!-- git vcs information -->
+                <source type="git">
+                    <git binary="/usr/bin/git" />
+                    <history enabled="true" limit="15" cache="${phpDox.project.workdir}/gitlog.xml" />
+                </source>
+
+                <!-- PHP Code Sniffer findings -->
+                <source type="phpcs">
+                    <file name="phpcs.xml" />
+                </source>
+
+                <!-- PHPMessDetector -->
+                <source type="pmd">
+                    <file name="pmd.xml" />
+                </source>
+
+                <!-- PHPUnit Coverage XML -->
+                <!-- <source type="phpunit">  -->
+                    <!-- <coverage path="" /> -->
+                    <!--           @path - the directory where the xml code coverage report can be found -->
+                    <!--<filter directory="${phpDox.project.source}" />-->
+                    <!-- @directory - path of the phpunit config whitelist filter directory -->
+                <!--</source>-->
+                <!--
+                <source type="phpunit">
+                    <filter directory="${phpDox.project.source}" />
+                </source>
+                -->
+
+            </enrich>
+
+            <!--  default engine "html" -->
+            <build engine="html" enabled="true" output="html">
+                <template dir="${phpDox.home}/templates/html" />
+                <file extension="html" />
+            </build>
+
+        </generator>
+    </project>
+
+</phpdox>

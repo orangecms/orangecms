@@ -5,7 +5,7 @@
 
 
  <target name="build"
-         depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci,phpunit,phpunit-integration,phpdox"
+         depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci,phpunit,phpunit-integration,phpdox,grunt"
          description=""/>
 
  <target name="build-parallel"
@@ -32,6 +32,8 @@
   <delete dir="${basedir}/build/logs"/>
   <delete dir="${basedir}/build/pdepend"/>
   <delete dir="${basedir}/build/phpdox"/>
+  <delete dir="${basedir}/node_modules"/>
+  <delete dir="${basedir}/vendor"/>
   <property name="clean.done" value="true"/>
  </target>
 
@@ -39,11 +41,20 @@
          unless="prepare.done"
          depends="clean"
          description="Prepare for build">
+  <copy file="config.php.dist" tofile="config.php"/>
+  <!-- create directories -->
   <mkdir dir="${basedir}/build/api"/>
   <mkdir dir="${basedir}/build/coverage"/>
   <mkdir dir="${basedir}/build/logs"/>
   <mkdir dir="${basedir}/build/pdepend"/>
   <mkdir dir="${basedir}/build/phpdox"/>
+  <!-- install build tools -->
+  <exec executable="composer" dir="${basedir}" failonerror="true" logError="true">
+   <arg value="install" />
+  </exec>
+  <exec executable="npm" dir="${basedir}" failonerror="true" logError="true">
+   <arg value="install" />
+  </exec>
   <property name="prepare.done" value="true"/>
  </target>
 
@@ -69,7 +80,7 @@
 
  <target name="phploc"
          unless="phploc.done"
-         description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+         description="Measure project size using PHPLOC and print human readable output. Run via CLI before committing.">
   <exec executable="${toolsdir}phploc" taskname="phploc">
    <arg value="--count-tests" />
    <arg path="${basedir}/ORN" />
@@ -82,7 +93,7 @@
  <target name="phploc-ci"
          unless="phploc.done"
          depends="prepare"
-         description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
+         description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for CI.">
   <exec executable="${toolsdir}phploc" taskname="phploc">
    <arg value="--count-tests" />
    <arg value="--log-csv" />
@@ -99,7 +110,7 @@
  <target name="pdepend"
          unless="pdepend.done"
          depends="prepare"
-         description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+         description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for CI.">
   <exec executable="${toolsdir}pdepend" taskname="pdepend">
    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
@@ -112,7 +123,7 @@
 
  <target name="phpmd"
          unless="phpmd.done"
-         description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+         description="Perform project mess detection using PHPMD and print human readable output. Run via CLI before committing.">
   <exec executable="${toolsdir}phpmd" taskname="phpmd">
    <arg path="${basedir}/ORN" />
    <arg value="text" />
@@ -125,7 +136,7 @@
  <target name="phpmd-ci"
          unless="phpmd.done"
          depends="prepare"
-         description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+         description="Perform project mess detection using PHPMD and log result in XML format. Intended for CI.">
   <exec executable="${toolsdir}phpmd" taskname="phpmd">
    <arg path="${basedir}/ORN" />
    <arg value="xml" />
@@ -139,13 +150,12 @@
 
  <target name="phpcs"
          unless="phpcs.done"
-         description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+         description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Run via CLI before committing.">
   <exec executable="${toolsdir}phpcs" taskname="phpcs">
-   <arg value="--standard=PSR2" />
+   <arg value="--standard=${basedir}/build/phpcs.xml" />
    <arg value="--extensions=php" />
    <arg value="--ignore=autoload.php" />
    <arg path="${basedir}/ORN" />
-   <arg path="${basedir}/Tests" />
   </exec>
 
   <property name="phpcs.done" value="true"/>
@@ -154,11 +164,10 @@
  <target name="phpcs-ci"
          unless="phpcs.done"
          depends="prepare"
-         description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+         description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for CI.">
   <exec executable="${toolsdir}phpcs" output="/dev/null" taskname="phpcs">
-   <arg value="--report=checkstyle" />
-   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-   <arg value="--standard=PSR2" />
+   <arg value="--report-xml=${basedir}/build/logs/phpcs.xml" />
+   <arg value="--standard=${basedir}/build/phpcs.xml" />
    <arg value="--extensions=php" />
    <arg value="--ignore=autoload.php" />
    <arg path="${basedir}/ORN" />
@@ -169,7 +178,7 @@
 
  <target name="phpcpd"
          unless="phpcpd.done"
-         description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+         description="Find duplicate code using PHPCPD and print human readable output. Run via CLI before committing.">
   <exec executable="${toolsdir}phpcpd" taskname="phpcpd">
    <arg path="${basedir}/ORN" />
   </exec>
@@ -180,7 +189,7 @@
  <target name="phpcpd-ci"
          unless="phpcpd.done"
          depends="prepare"
-         description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+         description="Find duplicate code using PHPCPD and log result in XML format. Intended for CI.">
   <exec executable="${toolsdir}phpcpd" taskname="phpcpd">
    <arg value="--log-pmd" />
    <arg path="${basedir}/build/logs/pmd-cpd.xml" />
@@ -222,5 +231,17 @@
 
   <property name="phpdox.done" value="true"/>
  </target>
+
+  <target name="grunt">
+    <exec executable="grunt" dir="${basedir}" outputproperty="log">
+<!--      <arg value="build"/> -->
+    </exec>
+ 
+    <echo message="${log}"/>
+    <condition property="onSuccess">
+      <matches pattern="Done, without errors." string="${log}"/>
+    </condition>
+    <fail message="Grunt failed!" unless="onSuccess"/>
+  </target>
 </project>
 

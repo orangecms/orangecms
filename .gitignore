@@ -3,9 +3,11 @@
 config.php
 
 # generated files
+build/*
+!build/*.xml
 dist
+docs
 release
-doc
 
 # libs
 node_modules

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="PHP_CodeSniffer">
+  <description>Orange CMS Coding Standard.</description>
+
+  <file>../ORN</file>
+
+  <exclude-pattern>*/Tests/*</exclude-pattern>
+
+  <arg name="report" value="summary"/>
+  <arg value="np"/>
+
+  <rule ref="PHPCS"/>
+</ruleset>
