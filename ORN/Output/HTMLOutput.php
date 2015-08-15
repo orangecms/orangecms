@@ -113,9 +113,17 @@ class HTMLOutput implements OutputInterface {
         $p = str_replace('|date|', $post['date'], $p);
         $p = str_replace('|id|', $id, $p);
         $p = str_replace('|text|', $this->parseText($post['text']), $p);
-        $fileName = $this->getImagePath($id, $post['media']);
-        $imageTag = $fileName ? "<img src=\"$fileName\" />" : $fileName;
-        $p = str_replace('|image|', $imageTag, $p);
+        // append media if available
+        // TODO: check for other media types
+        $media = $this->getImagePath($id, $post['media']);
+        if ($media != '') {
+            // TODO: support other templates for other media types
+            $mediaTemplate = @implode("", @file("template/image.html"));
+            $mediaTitle = "image";
+            $media = str_replace('|media_url|', $media, $mediaTemplate);
+            $media = str_replace('|media_title|', $mediaTitle, $media);
+        }
+        $p = str_replace('|media|', $media, $p);
         return $p;
     }
 

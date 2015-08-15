@@ -1,8 +1,7 @@
 var config = {
     pkg:  require('./package.json'),
     app:  '.',
-    dist: 'dist',
-    version: '0.5'
+    dist: 'dist'
 };
 
 module.exports = function (grunt) {
@@ -18,7 +17,7 @@ module.exports = function (grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'release/orangecms-' + config.version + '.zip'
+                    archive: 'release/orangecms-' + config.pkg.version + '.zip'
                 },
                 files: [
                     {
