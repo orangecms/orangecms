@@ -15,8 +15,40 @@ Releases can be found on [http://cms.orangecms.org/](http://cms.orangecms.org/).
 Only MySQL is supported for now. Just create a new database (schema) and a user to access it.
 
 ### Webserver
-For nginx you will have to configure the root to Orange CMS for rewrite rules and PHP execution.
+
+#### nginx with php-fpm (FastCGI)
+You will have to configure the root to Orange CMS for rewrite rules and PHP execution.
+
+Here is an example configuration (as it is on orangecms.org):
+```
+    root  /usr/local/www/blog/orangecms;
+    index index.php index.html;
+
+    location / {
+        if (!-e $request_filename){
+            rewrite ^(.*)$ /index.php last;
+        }
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        location ~ \.php$ {
+            include        fastcgi_params;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            try_files      $uri $uri/ /index.php?$args = 404;
+            fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        }
+    }
+```
+#### Apache
 Most preconfigured Apache installations should be fine. You might need to run `a2enmod rewrite`.
+
+### PHP
+You will need PHP>=5.6 with the following extensions:
+* json (for the REST API)
+* mysqli (for the DB)
+* simplexml (for the RSS output and demo posts)
+* session (to be able to log in)
 
 ## Orange CMS distribution
 If you obtained a zip file release, simply extract it and put the contents of the `orangecms` folder into the desired folder of your webserver.
