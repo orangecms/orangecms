@@ -43,7 +43,7 @@ abstract class RSS20 extends \stdClass {
      * @return string
      */
     public function getTitle() {
-        return $this->title;
+        return htmlspecialchars($this->title);
     }
 
     /**
@@ -71,7 +71,7 @@ abstract class RSS20 extends \stdClass {
      * @return string
      */
     public function getDescription() {
-        return $this->description;
+        return htmlspecialchars($this->description);
     }
 
     /**
