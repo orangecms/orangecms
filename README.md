@@ -49,6 +49,7 @@ You will need PHP>=5.6 with the following extensions:
 * mysqli (for the DB)
 * simplexml (for the RSS output and demo posts)
 * session (to be able to log in)
+* fileinfo (for media file type recognition)
 
 ## Orange CMS distribution
 If you obtained a zip file release, simply extract it and put the contents of the `orangecms` folder into the desired folder of your webserver.
